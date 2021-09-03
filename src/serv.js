@@ -74,7 +74,7 @@ app.post('/test', (req, res) => {
         if (err) console.log(err);
         else {
 
-            console.log('Appending data: ' + logEntry + ',\nAppended data\n' + data);
+            //console.log('Appending data: ' + logEntry + ',\nAppended data\n' + data);
 
             logEntry = '<br>' + logEntry + '<br>\n';
             logEntry += data;
@@ -88,7 +88,7 @@ app.post('/test', (req, res) => {
             res.write(logEntry);
             res.send();
 
-            console.log('response sent: ' + logEntry);
+            //console.log('response sent: ' + logEntry);
         }
     });
 
