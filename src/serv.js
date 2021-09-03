@@ -25,29 +25,73 @@ app.listen(port, (err) => {
 // Handles initial get request from client
 app.get('/', (req, res) => {
 
-    console.log('req received GET');
+    //console.log('req received GET');
 
     res.sendFile(path.resolve(__dirname, './pages/test.html'));
+
+    fs.appendFile('./pages/logs.txt', 'A user has connected\n', (err) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log('User connected');
+        }
+    })
 });
 
-// Handles post request made by user
+// Handles post request made by user for a refresh of chat box
+app.post('/ref', (req, res) => {
+
+    fs.readFile('./pages/recent.txt', 'utf8', (err, data) => {
+        if (err) console.log(err);
+        else {
+            var recentLog = data;
+
+            res.write(recentLog);
+            res.send();
+        }
+    });
+});
+// Handles post request made by user where they send message
 app.post('/test', (req, res) => {
 
     //Prints msg to console
-    const msg = req.body.message;
-    console.log('req received POST: \n' + (msg));
+    const _msg = req.body.message;
+    const _name = req.body.name;
+    //console.log('req received POST: \n' + (_msg));
 
-    const writeStream = fs.createWriteStream('./pages/logs.txt');
-    const readStream = fs.createReadStream('./pages/logs.txt');
+    //ROLAND
 
-    //TODO change this so that the data from a file is written to
-    //the response. and implement recent/log files
-    res.write('Post ID ' + randomInt(100, 999) + ': ' + msg);
+    //Creates entry for the log and writes to log file
+    var logEntry = '(' + _name.substring(0, 5) + ')\tPost ID ' + randomInt(100, 999) + ': ' + _msg;
+    fs.appendFile('./pages/logs.txt', logEntry + '\n', (err) => {
+        if (err) console.log(err);
+        else {
+            console.log('Message logged');
+        }
+    });
 
-    readStream.pipe(res);
-    res.send();
+    fs.readFile('./pages/recent.txt', 'utf8', (err, data) => {
+        if (err) console.log(err);
+        else {
 
-    readStream.close();
+            console.log('Appending data: ' + logEntry + ',\nAppended data\n' + data);
+
+            logEntry = '<br>' + logEntry + '<br>\n';
+            logEntry += data;
+
+            fs.writeFile('./pages/recent.txt', logEntry, (err) => {
+                if (err) console.log(err);
+            });
+
+            //TODO change this so that the data from a file is written to
+            //the response. and implement recent/log files
+            res.write(logEntry);
+            res.send();
+
+            console.log('response sent: ' + logEntry);
+        }
+    });
+
 });
 
 // Handles all other get requests
