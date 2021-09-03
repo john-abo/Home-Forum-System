@@ -48,7 +48,7 @@
         //Receives user's input from text box
         var userMsg = document.getElementById("msgTxt").value
 
-        console.log("Msg length: " + userMsg.length);
+        //console.log("Msg length: " + userMsg.length);
 
         //message object that will be sent with the request
         const msgSend = {
@@ -66,14 +66,14 @@
 
         msg = JSON.stringify(msgSend);
 
-        console.log('Text input: ' + msg);
+        //console.log('Text input: ' + msg);
 
         //Creates request for http server
         var xhttp = new XMLHttpRequest();
 
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                console.log(this.responseText);
+                //console.log(this.responseText);
                 document.getElementById("textSpace").innerHTML = this.responseText;
             }
         };
@@ -85,6 +85,11 @@
         xhttp.send(msg);
 
         console.log('request sent');
+        //console.log('request sent');
+
+        document.getElementById('msgTxt').value = '';
+
+        //console.log('box cleared?')
     }
 
 </script>
