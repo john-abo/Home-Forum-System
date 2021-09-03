@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<p>This is just a test:</p><br>
+
+<label>message: </label>
+<input  type = "text"
+        id = "msgTxt"
+        name = "msgTxt"
+        style = "width: 200px; height: auto;">
+<button onclick="testFunc()">send</button><br>
+
+<p id = 'textSpace'></p>>
+
+<script type = "text/javascript">
+    function testFunc() {
+
+        //Receives user's input from text box
+        var userMsg = document.getElementById("msgTxt").value
+
+        const msgSend = {'message' : 'death'};
+
+        console.log('Text input: ' + userMsg);
+
+        //Creates request for http server
+        var xhttp = new XMLHttpRequest();
+
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(this.responseText);
+                document.getElementById("textSpace").innerHTML = this.responseText;
+            }
+        };
+
+        //Sends POST request with json containing user data
+
+        xhttp.open('POST', '/test', true);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.send('message');
+
+        console.log('request sent');
+    }
+</script>
+</html>
