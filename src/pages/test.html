@@ -3,41 +3,61 @@
 <p>This is just a test:</p><br>
 
 <label>message: </label>
-<input  type = "text"
-        id = "msgTxt"
-        name = "msgTxt"
-        style = "width: 200px; height: auto;">
-<button onclick="testFunc()">send</button><br>
+<input type="text" id="msgTxt" name="msgTxt" style="width: 200px; height: auto;">
+<button onclick="testFunc()">post</button><br>
 
-<p id = 'textSpace'></p>>
+<p id="errMsg" style="color: red;">TEST</p>
 
-<script type = "text/javascript">
+<p>Text box borrowed from https://www.quackit.com/html/codes/html_scroll_box.cfm</p>
+
+<div id="textSpace" style="   height:480px;
+                                width:480px;
+                                border:1px sol#ccc;
+                                font:16px/26px Georgia, Garamond, Serif;
+                                overflow:scroll;">
+</div> <br>
+
+<script type="text/javascript">
     function testFunc() {
 
         //Receives user's input from text box
         var userMsg = document.getElementById("msgTxt").value
 
-        const msgSend = {'message' : 'death'};
+        console.log("Msg length: " + userMsg.length);
 
-        console.log('Text input: ' + userMsg);
+        if (userMsg.length > 100) {
+            document.getElementById("errMsg").innerHTML = "message too long, please shorten to less than 100 characters";
+        } else {
 
-        //Creates request for http server
-        var xhttp = new XMLHttpRequest();
+            const msgSend = {
+                "err": 100,
+                "message": userMsg,
+                "name": "test name"
+            };
 
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                console.log(this.responseText);
-                document.getElementById("textSpace").innerHTML = this.responseText;
-            }
-        };
+            msg = JSON.stringify(msgSend);
 
-        //Sends POST request with json containing user data
+            console.log('Text input: ' + msg);
 
-        xhttp.open('POST', '/test', true);
-        xhttp.setRequestHeader("Content-type", "application/json");
-        xhttp.send('message');
+            //Creates request for http server
+            var xhttp = new XMLHttpRequest();
 
-        console.log('request sent');
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log(this.responseText);
+                    document.getElementById("textSpace").innerHTML += '<br>' + this.responseText + '<br>';
+                }
+            };
+
+            //Sends POST request with json containing user data
+
+            xhttp.open('POST', '/test', true);
+            xhttp.setRequestHeader("content-type", "application/json");
+            xhttp.send(msg);
+
+            console.log('request sent');
+        }
     }
 </script>
+
 </html>
