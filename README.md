@@ -9,3 +9,5 @@ or on linux/Mac with their shell using:
   ipconfig -a
 
 log files were removed to ensure any local changes done on my own home system isn't added to the github repository.
+
+The filenames can be changed in the src, and is left to users choice. 
