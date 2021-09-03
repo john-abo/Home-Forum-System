@@ -1,3 +1,5 @@
 ./src/pages/logs.txt
 ./src/pages/recent.txt
 *.txt
+src/pages/recent.txt
+src/pages/logs.txt
