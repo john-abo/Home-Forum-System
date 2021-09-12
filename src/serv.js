@@ -3,7 +3,9 @@
  * side page's response
  */
 
-//Modules used in the project
+//Test: Looking for IPv4 of host machine
+const os = require('os');
+
 const { randomInt } = require('crypto');
 const express = require('express');
 const fs = require('fs');
@@ -14,12 +16,24 @@ const app = express();
 app.use(express.json());
 
 //Sets port that will be listened to
-const port = 3000;
+const port = 6442;
+
+var networkInterfaces = os.networkInterfaces();
 
 //Begins listening on port set. Server is started
 app.listen(port, (err) => {
     if (err) console.log(err);
     console.log('Server is listening on port: ' + port);
+
+   
+
+    //Code was borrowed from: https://www.jsdiaries.com/how-to-get-a-local-ip-address-in-node-js/
+    //The name of the connection is going to need to change for each machine running it I'm pretty sure, which is what the following line is for
+    //console.log('Network interface: ' + JSON.stringify(networkInterfaces));
+    const ip = networkInterfaces["Wi-Fi"][1].address;
+
+    // Generates the link that llows other users to access the messaging system
+    console.log('Generated link: http://' + ip + ':' + port );
 });
 
 // Handles initial get request from client
